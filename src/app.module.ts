@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import {TypeOrmModule} from '@nestjs/typeorm'
 import { ResturantModule } from './resturant/resturant.module';
+import { Resturant } from './resturant/entities/resturant.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,8 +29,9 @@ import { ResturantModule } from './resturant/resturant.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      synchronize: true,
-      logging: true
+      synchronize: process.env.NODE_ENV !== "prod",
+      logging: process.env.NODE_ENV !== "prod",
+      entities: [Resturant]
     }),
     GraphQLModule.forRoot({
        autoSchemaFile: true,
