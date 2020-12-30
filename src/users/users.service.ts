@@ -20,6 +20,7 @@ export class UsersService {
                 return [false, `${email} has already been taken`];
             } 
             await this.users.save(this.users.create({email, password, role}));
+            console.log(password)
             return [true, "Account created"];
         }
          catch (error) {
