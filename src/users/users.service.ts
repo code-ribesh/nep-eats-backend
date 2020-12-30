@@ -1,7 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { promises } from "dns";
 import { Repository } from "typeorm";
 import { CreateAccountInput } from "./dtos/create-account.dto";
+import { LoginInput } from "./dtos/login.dto";
 import { User } from "./entities/user.entity";
 
 @Injectable()
@@ -10,23 +12,56 @@ export class UsersService {
         @InjectRepository(User) private readonly users: Repository<User>
     ){}
 
-   async createAccount({email, password, role}: CreateAccountInput) : Promise<[boolean, string]>{
+   async createAccount({email, password, role}: CreateAccountInput) : Promise<{ok:boolean, error?:string}>{
        // check that email does not exits or check new user
        // create new user
         try {
             const exits  =  await this.users.findOne({email});
             if (exits) {
                 // make error
-                return [false, `${email} has already been taken`];
+                return {ok:false, error:`${email} has already been taken`};
             } 
             await this.users.save(this.users.create({email, password, role}));
             console.log(password)
-            return [true, "Account created"];
+            return {ok: true};
         }
          catch (error) {
             // make error
-            return [false, "Couldn't create an account"];
+            return {ok:false, error:"Couldn't create an account"};
         }
-       // hash the password
+       
    }
+  async login({email, password}: LoginInput): Promise<{ok:boolean, error?:string, token?: string}>{
+    //find the user with the email
+    // check if the password is correct
+    // make a jwt token and give it to the user
+
+    try {
+        const user = await this.users.findOne({email});
+        if(!user){
+            return{
+               ok: false,
+               error: `${email} not found! try creating new account.` 
+            };
+        }
+    const passwordCorrect = await user.checkPassword(password);
+    if (!passwordCorrect) {
+        return {
+            ok: false,
+            error: 'Wrong password',
+        };
+    }
+    return {
+        ok: true,
+        token: "lalalalalala",
+    };
+
+    } catch (error) {
+        return {
+            ok: false,
+            error
+        }
+    }
+  }
+
 }
