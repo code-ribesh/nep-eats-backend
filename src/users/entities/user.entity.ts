@@ -37,6 +37,9 @@ export class User extends CoreEntity {
     enum: UserRole,
   })
   role: UserRole;
+  @Column({ default: false })
+  @Field(typr => Boolean)
+  verified: boolean;
 
   @BeforeInsert()
   @BeforeUpdate()
