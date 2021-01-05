@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { AuthUser } from 'src/auth/auth-user.decorator';
@@ -15,7 +16,9 @@ import { UsersService } from './users.service';
 
 @Resolver(of => User)
 export class UsersResolver {
-  constructor(private readonly userService: UsersService) {}
+  constructor(private readonly userService: UsersService) {
+    
+  }
 
   @Query(returns => Boolean)
   hi() {

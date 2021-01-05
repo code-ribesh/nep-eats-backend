@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Field,
   InputType,
@@ -21,6 +22,7 @@ registerEnumType(UserRole, { name: 'UserRole' });
 @ObjectType()
 @Entity()
 export class User extends CoreEntity {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @Field(type => String)
   @Column()
   @IsEmail()
@@ -38,7 +40,7 @@ export class User extends CoreEntity {
   })
   role: UserRole;
   @Column({ default: false })
-  @Field(typr => Boolean)
+  @Field(type => Boolean)
   verified: boolean;
 
   @BeforeInsert()

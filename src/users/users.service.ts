@@ -12,18 +12,19 @@ import { Verification } from './entities/verification.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
-    @InjectRepository(Verification)
-    private readonly verifications: Repository<Verification>,
+    @InjectRepository(Verification) private readonly verifications: Repository<Verification>,
     private readonly jwtService: JwtService,
   ) {}
 
+
+  // Check that email does not exits or check new user
+  // Create new user
+  // Throw an output
   async createAccount({
     email,
     password,
     role,
   }: CreateAccountInput): Promise<{ ok: boolean; error?: string }> {
-    // check that email does not exits or check new user
-    // create new user
     try {
       const exits = await this.users.findOne({ email });
       if (exits) {
@@ -45,14 +46,16 @@ export class UsersService {
       return { ok: false, error: "Couldn't create an account" };
     }
   }
+
+  // Find the user with the email
+  // Check if the password is correct
+  // Make a jwt token and give it to the user
+  // Throw an output
+
   async login({
     email,
     password,
   }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
-    //find the user with the email
-    // check if the password is correct
-    // make a jwt token and give it to the user
-
     try {
       const user = await this.users.findOne(
         { email },
@@ -88,17 +91,20 @@ export class UsersService {
   async findById(id: number): Promise<User> {
     return this.users.findOne({ id });
   }
-
+ 
+  // Find user by ID
+  // Check user email and password
+  // Save the new data
+  // Throw an output
   async editProfile(
     userId: number,
     { email, password }: EditProfileInput,
   ): Promise<User> {
-    //console.log({ ...editProfileInput });
     const user = await this.users.findOne(userId);
     if (email) {
       user.email = email;
       user.verified = false;
-      await this.verifications.save(this.verifications.create({ user }));
+      //await this.verifications.save(this.verifications.create({ user }));
     }
     if (password) {
       user.password = password;

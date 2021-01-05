@@ -15,7 +15,11 @@ The backend of Nep Eats
 ## User CRUD:
 
 - Create Account
+
 - Log In
+
 - See Profile
+
 - Edit Profile
+
 - Verify Email
